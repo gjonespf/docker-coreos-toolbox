@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/core/runtime:2.2
 # ARG USER=octo
 # ARG USER_UID=1000
 # ARG USER_GID=500
-# ARG DOCKER_GID=233
+ARG DOCKER_GID=233
 
 MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
 # https://download.docker.com/linux/static/stable/x86_64/
@@ -66,10 +66,9 @@ RUN tar zxf /tmp/linux.tar.gz -C ${PS_INSTALL_FOLDER} \
 	&& ln -s ${PS_INSTALL_FOLDER}/pwsh /usr/local/bin/pwsh  \
 	&& ln -s ${PS_INSTALL_FOLDER}/pwsh /usr/local/bin/powershell
 
-# # Add users/groups to allow binding to host fs
-# RUN 			addgroup --gid 500 core && \
-# 				adduser -h /home/core -s /bin/bash -u 500 -G core -D core && \
-# 				adduser -h /home/octo -s /bin/bash -u 1000 -G core -D octo
+				
+# Manually add groups and memberships as we're installing via bins
+RUN             groupadd -g ${DOCKER_GID} docker && adduser core docker && adduser octo docker
 
 # #Set PSGallery to trusted, and install PS module PSDepend by default
 # #RUN				pwsh -c "Get-PSRepository; Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
