@@ -8,14 +8,14 @@ FROM mcr.microsoft.com/dotnet/core/runtime:2.2
 # ARG DOCKER_GID=233
 
  MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
-# # https://download.docker.com/linux/static/stable/x86_64/
+# https://download.docker.com/linux/static/stable/x86_64/
 # ENV 			DOCKER_VERSION 18.06.1-ce
-# # https://github.com/docker/compose/releases/
+# https://github.com/docker/compose/releases/
 # ENV 			DOCKER_COMPOSE_VERSION 1.24.0
-# # https://github.com/docker/machine/releases/
-# ENV 			DOCKER_MACHINE_VERSION 0.16.1
+# https://github.com/docker/machine/releases/
+ENV 			DOCKER_MACHINE_VERSION 0.16.1
 # ENV	 			MACH_ARCH x86_64
-# ENV 			TERM xterm
+ENV 			TERM xterm
 # #To override if needed
 # ARG 			TAG=dev
 # ENV 			TAG ${TAG}
@@ -27,30 +27,21 @@ FROM mcr.microsoft.com/dotnet/core/runtime:2.2
 # ARG 			PS_PACKAGE_URL=https://github.com/PowerShell/PowerShell/releases/download/v${PS_VERSION}/${PS_PACKAGE}
 # ARG 			PS_INSTALL_VERSION=6
 
-# RUN				apk update \
-# 				&& apk add --no-cache git nano wget curl gnupg libunwind bash shadow
-RUN             groupadd -g 500 core && useradd -u 500 -g 500 -s /bin/bash core && useradd -u 1000 -g 500 -s /bin/bash octo
+RUN             apt-get update \
+                && apt-get install -y openssl sudo git nano wget curl iputils-ping dnsutils docker docker-compose \
+                && apt-get clean
 
-# #Docker bins
-# WORKDIR     	/home/toolbox/
+RUN             groupadd -g 500 core && useradd -u 500 -g 500 -s /bin/bash core && useradd -u 1000 -g 500 -s /bin/bash octo && adduser core sudo
 
-# #Docker via bins to get latest
-# #Just use Alpine package for now
-# RUN 			apk add --no-cache docker docker-compose 
-
-# #Docker compose
-# # RUN 			curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
-# # 				chmod +x /usr/local/bin/docker-compose
-
-# #Docker machine
-# RUN				curl -L https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine && \
-# 				chmod +x /usr/local/bin/docker-machine
+#Docker machine
+RUN				curl -L https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine && \
+				chmod +x /usr/local/bin/docker-machine
 	
-# #Minio tools
-# RUN				curl -L https://dl.minio.io/server/minio/release/linux-amd64/minio > /usr/local/bin/minio && \
-# 				chmod +x /usr/local/bin/minio
-# RUN				curl -L https://dl.minio.io/client/mc/release/linux-amd64/mc > /usr/local/bin/mc && \
-# 				chmod +x /usr/local/bin/mc
+#Minio tools
+RUN				curl -L https://dl.minio.io/server/minio/release/linux-amd64/minio > /usr/local/bin/minio && \
+				chmod +x /usr/local/bin/minio
+RUN				curl -L https://dl.minio.io/client/mc/release/linux-amd64/mc > /usr/local/bin/mc && \
+				chmod +x /usr/local/bin/mc
 
 # #
 # # Installing powershell-core
