@@ -1,5 +1,5 @@
-FROM 			mcr.microsoft.com/dotnet/core/runtime:2.2.5-alpine3.8
-# powershell:6.2.1-alpine-3.8
+#FROM 			mcr.microsoft.com/dotnet/core/runtime:2.2.5-alpine3.8
+FROM ubuntu
 
 # ARG USER=octo
 # ARG USER_UID=1000
@@ -26,9 +26,9 @@ FROM 			mcr.microsoft.com/dotnet/core/runtime:2.2.5-alpine3.8
 # ARG 			PS_PACKAGE_URL=https://github.com/PowerShell/PowerShell/releases/download/v${PS_VERSION}/${PS_PACKAGE}
 # ARG 			PS_INSTALL_VERSION=6
 
-RUN				apk update \
-				&& apk add --no-cache git nano wget curl gnupg libunwind bash shadow
-RUN groupadd -g 500 core && useradd -u 500 -g 500 -s /bin/bash core && useradd -u 1000 -g 500 -s /bin/bash octo
+# RUN				apk update \
+# 				&& apk add --no-cache git nano wget curl gnupg libunwind bash shadow
+RUN             groupadd -g 500 core && useradd -u 500 -g 500 -s /bin/bash core && useradd -u 1000 -g 500 -s /bin/bash octo
 
 # #Docker bins
 # WORKDIR     	/home/toolbox/
