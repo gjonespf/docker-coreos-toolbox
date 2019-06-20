@@ -1,12 +1,13 @@
 #FROM 			mcr.microsoft.com/dotnet/core/runtime:2.2.5-alpine3.8
-FROM ubuntu
+#FROM ubuntu
+FROM mcr.microsoft.com/dotnet/core/runtime:2.2
 
 # ARG USER=octo
 # ARG USER_UID=1000
 # ARG USER_GID=500
 # ARG DOCKER_GID=233
 
-# MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
+ MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
 # # https://download.docker.com/linux/static/stable/x86_64/
 # ENV 			DOCKER_VERSION 18.06.1-ce
 # # https://github.com/docker/compose/releases/
